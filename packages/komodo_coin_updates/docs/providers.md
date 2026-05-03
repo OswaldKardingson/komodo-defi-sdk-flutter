@@ -15,11 +15,11 @@ Constructor options:
 ```dart
 GithubCoinConfigProvider(
   branch: 'master',
-  coinsGithubContentUrl: 'https://raw.githubusercontent.com/GLEECBTC/coins',
-  coinsGithubApiUrl: 'https://api.github.com/repos/GLEECBTC/coins',
+  coinsGithubContentUrl: 'https://raw.githubusercontent.com/kmdclassic/coins',
+  coinsGithubApiUrl: 'https://api.github.com/repos/kmdclassic/coins',
   coinsPath: 'coins',
   coinsConfigPath: 'utils/coins_config_unfiltered.json',
-  cdnBranchMirrors: {'master': 'https://gleecbtc.github.io/coins'},
+  cdnBranchMirrors: {'master': 'https://kmdclassic.github.io/coins'},
   githubToken: envToken,
   transformer: const CoinConfigTransformer(),
 );

@@ -5,7 +5,7 @@
         "fetch_at_build_enabled": true,
         "concurrent_downloads_enabled": true,
         "source_urls": [
-            "https://api.github.com/repos/GLEECBTC/komodo-defi-framework",
+            "https://api.github.com/repos/kmdclassic/komodo-defi-framework",
             "https://nebula.decker.im/kdf/",
             "https://sdk.devbuilds.komodo.earth/"
         ],
@@ -69,8 +69,8 @@
         "fetch_at_build_enabled": true,
         "update_commit_on_build": true,
         "bundled_coins_repo_commit": "b8f85666325ca1cc6306ca113e7129d73e77e0f0",
-        "coins_repo_api_url": "https://api.github.com/repos/GLEECBTC/coins",
-        "coins_repo_content_url": "https://raw.githubusercontent.com/GLEECBTC/coins",
+        "coins_repo_api_url": "https://api.github.com/repos/kmdclassic/coins",
+        "coins_repo_content_url": "https://raw.githubusercontent.com/kmdclassic/coins",
         "coins_repo_branch": "master",
         "runtime_updates_enabled": true,
         "mapped_files": {
@@ -83,8 +83,8 @@
         },
         "concurrent_downloads_enabled": false,
         "cdn_branch_mirrors": {
-            "master": "https://gleecbtc.github.io/coins",
-            "main": "https://gleecbtc.github.io/coins"
+            "master": "https://kmdclassic.github.io/coins",
+            "main": "https://kmdclassic.github.io/coins"
         }
     }
 }
