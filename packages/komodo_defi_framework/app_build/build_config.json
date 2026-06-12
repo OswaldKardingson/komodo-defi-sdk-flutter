@@ -1,26 +1,25 @@
 {
     "api": {
-        "api_commit_hash": "475cdb49bc343a8fefdc2caaa1635d5ec426990b",
+        "api_commit_hash": "5be905f814de7e2ae6be0a064d4c1211292e1738",
         "branch": "v2.6.0-beta",
         "fetch_at_build_enabled": true,
         "concurrent_downloads_enabled": true,
         "source_urls": [
             "https://api.github.com/repos/kmdclassic/komodo-defi-framework",
-            "https://nebula.decker.im/kdf/",
-            "https://sdk.devbuilds.komodo.earth/main/"
+            "https://api.github.com/repos/OswaldKardingson/komodo-defi-framework"
         ],
         "platforms": {
             "web": {
                 "matching_pattern": "^(?:kdf_[a-f0-9]{7,40}-wasm|mm2_[a-f0-9]{7,40}-wasm|mm2-[a-f0-9]{7,40}-wasm)\\.zip$",
                 "valid_zip_sha256_checksums": [
-                    "8a31090c2b821fef812e63a95885c9f68adcba356e0eb5eb58deffb0a87e9a28"
+                    "0ea4e9de005653a324bd6dacacb32bf2b695040f99d5ba7e25f0c87cb727941b"
                 ],
                 "path": "web/kdf/bin"
             },
             "ios": {
                 "matching_pattern": "^(?:kdf_[a-f0-9]{7,40}-ios-aarch64|mm2_[a-f0-9]{7,40}-ios-aarch64|mm2-[a-f0-9]{7,40}-ios-aarch64-CI)\\.zip$",
                 "valid_zip_sha256_checksums": [
-                    "bf0addc72efd501e907e1d9f6a758b80a568b93722375ec007b80d44e9a1bce8"
+                    "381ff092b43ec1ce1215b59c62ea36e2b4e1e26627b46470d974213b10d7dd2b"
                 ],
                 "path": "ios"
             },
@@ -31,35 +30,35 @@
                     "mac-arm64"
                 ],
                 "valid_zip_sha256_checksums": [
-                    "1c245a09000cbe7d441945fe566ff41ee4a8fe773644e2c55339ef99f01cec5a"
+                    "092800d9cca440e383d1aa1df7a18472fb4c297a253f8a17725c5d612dd23a96"
                 ],
                 "path": "macos/bin"
             },
             "windows": {
                 "matching_pattern": "^(?:kdf_[a-f0-9]{7,40}-win-x86-64|mm2_[a-f0-9]{7,40}-win-x86-64|mm2-[a-f0-9]{7,40}-Win64)\\.zip$",
                 "valid_zip_sha256_checksums": [
-                    "78e5ef2f4e78b79c9bca2642756e9f4b2799e3121ffa039dc88f24e901f5ad29"
+                    "92da45a719b192f35f38067676501cff861dc50150ab16af193d9d8df9474238"
                 ],
                 "path": "windows/bin"
             },
             "android-armv7": {
                 "matching_pattern": "^(?:kdf_[a-f0-9]{7,40}-android-armv7|mm2_[a-f0-9]{7,40}-android-armv7|mm2-[a-f0-9]{7,40}-android-armv7-CI)\\.zip$",
                 "valid_zip_sha256_checksums": [
-                    "8815e71252117053693e5eebda383a33b90a41a246ef362be67ce72eec828f7f"
+                    "5f4b406d0c4e85a2b528299175c47677a3ea2cdb463e2de7b30ef3ce2e92b7e4"
                 ],
                 "path": "android/app/src/main/cpp/libs/armeabi-v7a"
             },
             "android-aarch64": {
                 "matching_pattern": "^(?:kdf_[a-f0-9]{7,40}-android-aarch64|mm2_[a-f0-9]{7,40}-android-aarch64|mm2-[a-f0-9]{7,40}-android-aarch64-CI)\\.zip$",
                 "valid_zip_sha256_checksums": [
-                    "92e7af070c27f3e397dc5540a8e7fcbf85471955b355d0b0fdfde0c6b2ea3842"
+                    "2bb4d9bc7eadf66622789d6680ec914cbb450ae91dd5d3f8277fe73679832bec"
                 ],
                 "path": "android/app/src/main/cpp/libs/arm64-v8a"
             },
             "linux": {
                 "matching_pattern": "^(?:kdf_[a-f0-9]{7,40}-linux-x86-64|mm2_[a-f0-9]{7,40}-linux-x86-64|mm2-[a-f0-9]{7,40}-Linux-Release)\\.zip$",
                 "valid_zip_sha256_checksums": [
-                    "f10fcd521f2cba0d832c7ed29092b9b0ab7980c60f74774ca09543a13239b6d2"
+                    "0982349eea41eeaea1b5d98956f664a0ec0a7770ac92930023908ae4512b2bf6"
                 ],
                 "path": "linux/bin"
             }
