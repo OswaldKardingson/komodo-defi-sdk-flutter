@@ -76,17 +76,18 @@ class TrezorRepository {
       var isComplete = false;
 
       Future<void> pollStatus() async {
-        if (isComplete || taskId == null) return;
+        final activeTaskId = taskId;
+        if (isComplete || activeTaskId == null) return;
 
         try {
           final statusResponse = await _client.rpc.trezor.status(
-            taskId: taskId,
+            taskId: activeTaskId,
             forgetIfFinished: false,
           );
 
           final state = TrezorInitializationState.fromStatusResponse(
             statusResponse,
-            taskId,
+            activeTaskId,
           );
 
           if (!controller!.isClosed) {
