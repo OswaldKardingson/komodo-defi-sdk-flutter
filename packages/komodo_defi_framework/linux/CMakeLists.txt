@@ -28,16 +28,24 @@ target_include_directories(${PLUGIN_NAME} INTERFACE
 target_link_libraries(${PLUGIN_NAME} PRIVATE flutter)
 target_link_libraries(${PLUGIN_NAME} PRIVATE PkgConfig::GTK)
 
-# Copy kdf binary to $HOME/.local/bin/kdf to make it accessible
+# Copy KDF to $HOME/.local/bin only when an artifact exists for this host.
+# Linux ARM64 has no KDF release artifact yet. Applications without swaps may
+# build the plugin there, but x86_64 builds still require their pinned KDF.
 set(FINAL_INSTALL_DIR "$ENV{HOME}/.local/bin")
 set(KDF_PATH "${CMAKE_CURRENT_SOURCE_DIR}/bin/kdf")
 
-add_custom_command(
-    TARGET ${PLUGIN_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${KDF_PATH} 
-        "${FINAL_INSTALL_DIR}/kdf"
-)
+if(NOT EXISTS "${KDF_PATH}" AND NOT CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64|arm64)$")
+  message(FATAL_ERROR "KDF executable not found for ${CMAKE_SYSTEM_PROCESSOR}: ${KDF_PATH}")
+endif()
+
+if(EXISTS "${KDF_PATH}")
+  add_custom_command(
+      TARGET ${PLUGIN_NAME} POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy_if_different
+          "${KDF_PATH}"
+          "${FINAL_INSTALL_DIR}/kdf"
+  )
+endif()
 
 # List of absolute paths to libraries that should be bundled with the plugin
 set(mm2_bundled_libraries
@@ -45,16 +53,11 @@ set(mm2_bundled_libraries
     PARENT_SCOPE
 )
 
-set(KDF_PATH "${CMAKE_CURRENT_SOURCE_DIR}/bin/kdf")
-
 # List of absolute paths to libraries that should be bundled with the plugin.
 # This list could contain prebuilt libraries, or libraries created by an
 # external build triggered from this build file.
-set(komodo_defi_framework_bundled_libraries
-
-  # Defined in ../src/CMakeLists.txt.
-  # This can be changed to accommodate different builds.
-  $<TARGET_FILE:komodo_defi_framework>
-  ${KDF_PATH}
-  PARENT_SCOPE
-)
+set(KDF_BUNDLED_LIBRARIES $<TARGET_FILE:komodo_defi_framework>)
+if(EXISTS "${KDF_PATH}")
+  list(APPEND KDF_BUNDLED_LIBRARIES "${KDF_PATH}")
+endif()
+set(komodo_defi_framework_bundled_libraries ${KDF_BUNDLED_LIBRARIES} PARENT_SCOPE)
