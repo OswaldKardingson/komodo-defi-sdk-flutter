@@ -24,4 +24,13 @@ void main() {
       ),
     );
   });
+
+  test('finds an installed Linux KDF beside the wallet executable', () {
+    expect(
+      finder.constructLinuxInstalledArtifactPath(
+        hostExecutablePath: p.join('opt', 'stashi', 'stashi-wallet'),
+      ),
+      p.join('opt', 'stashi', 'lib', 'kdf'),
+    );
+  });
 }

@@ -83,8 +83,8 @@ class KdfOperationsLocalExecutable implements IKdfOperations {
       );
     }
 
-    // specifically needed on linux, which currently resets the file permissions
-    // on every build.
+    // Local builds may lose the execute bit. Installed bundles may be
+    // read-only, so only repair permissions when the binary cannot run.
     await _tryGrantExecutablePermissions(executablePath);
 
     if (!params.containsKey('coins')) {
@@ -141,10 +141,12 @@ class KdfOperationsLocalExecutable implements IKdfOperations {
     }
   }
 
-  /// check if the executable has executable permissions on linux/macos
-  /// if not, run chmod +x on it
+  /// Repair the execute bit on a writable local build when needed.
   Future<void> _tryGrantExecutablePermissions(String executablePath) async {
     if (Platform.isLinux || Platform.isMacOS) {
+      final executable = await Process.run('test', ['-x', executablePath]);
+      if (executable.exitCode == 0) return;
+
       final result = await Process.run('chmod', ['+x', executablePath]);
       if (result.exitCode != 0) {
         throw KdfException(
@@ -192,9 +194,12 @@ class KdfOperationsLocalExecutable implements IKdfOperations {
     }
 
     final coinsCount = params.valueOrNull<List<dynamic>>('coins')?.length;
-    _logCallback(
-      'Starting KDF with parameters: ${{...params, 'coins': '{{OMITTED $coinsCount ITEMS}}', 'log_level': logLevel ?? 3}.censored().toJsonString()}',
-    );
+    final logParams = {
+      ...params,
+      'coins': '{{OMITTED $coinsCount ITEMS}}',
+      'log_level': logLevel ?? 3,
+    }.censored().toJsonString();
+    _logCallback('Starting KDF with parameters: $logParams');
 
     try {
       _process = await _startKdf(params);

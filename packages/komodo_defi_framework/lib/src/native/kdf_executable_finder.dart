@@ -46,6 +46,8 @@ class KdfExecutableFinder {
     ]);
 
     final files = [
+      if (Platform.isLinux)
+        constructLinuxInstalledArtifactPath(executableName: executableName),
       '/usr/local/bin/$executableName',
       '/usr/bin/$executableName',
       p.join(Directory.current.path, executableName),
@@ -83,7 +85,17 @@ class KdfExecutableFinder {
     return null;
   }
 
-  /// Build path to KDF executable on Linux
+  /// Build path to KDF beside the installed Linux application executable.
+  String constructLinuxInstalledArtifactPath({
+    String executableName = 'kdf',
+    String? hostExecutablePath,
+  }) => p.join(
+    p.dirname(hostExecutablePath ?? Platform.resolvedExecutable),
+    'lib',
+    executableName,
+  );
+
+  /// Build path to KDF executable in a local Linux build.
   String constructLinuxBuildArtifactPath({
     BuildMode mode = BuildMode.release,
     bool isLib = false,
