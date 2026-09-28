@@ -28,24 +28,29 @@ target_include_directories(${PLUGIN_NAME} INTERFACE
 target_link_libraries(${PLUGIN_NAME} PRIVATE flutter)
 target_link_libraries(${PLUGIN_NAME} PRIVATE PkgConfig::GTK)
 
-# Copy KDF to $HOME/.local/bin only when an artifact exists for this host.
-# Linux ARM64 has no KDF release artifact yet. Applications without swaps may
-# build the plugin there, but x86_64 builds still require their pinned KDF.
+# Select a KDF executable built for this host. Flutter packages it alongside
+# the plugin, so a missing or wrong-architecture executable must fail the build.
 set(FINAL_INSTALL_DIR "$ENV{HOME}/.local/bin")
-set(KDF_PATH "${CMAKE_CURRENT_SOURCE_DIR}/bin/kdf")
+string(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" KDF_PROCESSOR)
+if(KDF_PROCESSOR MATCHES "^(aarch64|arm64)$")
+  set(KDF_PATH "${CMAKE_CURRENT_SOURCE_DIR}/arm64/bin/kdf")
+elseif(KDF_PROCESSOR MATCHES "^(x86_64|amd64)$")
+  set(KDF_PATH "${CMAKE_CURRENT_SOURCE_DIR}/bin/kdf")
+else()
+  message(FATAL_ERROR "Unsupported Linux architecture for KDF: ${CMAKE_SYSTEM_PROCESSOR}")
+endif()
 
-if(NOT EXISTS "${KDF_PATH}" AND NOT CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64|arm64)$")
+if(NOT EXISTS "${KDF_PATH}")
   message(FATAL_ERROR "KDF executable not found for ${CMAKE_SYSTEM_PROCESSOR}: ${KDF_PATH}")
 endif()
 
-if(EXISTS "${KDF_PATH}")
-  add_custom_command(
-      TARGET ${PLUGIN_NAME} POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy_if_different
-          "${KDF_PATH}"
-          "${FINAL_INSTALL_DIR}/kdf"
-  )
-endif()
+add_custom_command(
+    TARGET ${PLUGIN_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E make_directory "${FINAL_INSTALL_DIR}"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${KDF_PATH}"
+        "${FINAL_INSTALL_DIR}/kdf"
+)
 
 # List of absolute paths to libraries that should be bundled with the plugin
 set(mm2_bundled_libraries
@@ -57,7 +62,5 @@ set(mm2_bundled_libraries
 # This list could contain prebuilt libraries, or libraries created by an
 # external build triggered from this build file.
 set(KDF_BUNDLED_LIBRARIES $<TARGET_FILE:komodo_defi_framework>)
-if(EXISTS "${KDF_PATH}")
-  list(APPEND KDF_BUNDLED_LIBRARIES "${KDF_PATH}")
-endif()
+list(APPEND KDF_BUNDLED_LIBRARIES "${KDF_PATH}")
 set(komodo_defi_framework_bundled_libraries ${KDF_BUNDLED_LIBRARIES} PARENT_SCOPE)

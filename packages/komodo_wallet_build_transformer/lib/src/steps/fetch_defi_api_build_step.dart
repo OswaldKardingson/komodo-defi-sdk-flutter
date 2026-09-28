@@ -320,7 +320,7 @@ class FetchDefiApiStep extends BuildStep {
           config.validZipSha256Checksums,
         );
 
-        // Consider up-to-date only if the stored set exactly matches the target set
+        // An artifact is current only when its stored checksums match the pin.
         final storedSet = storedChecksums.toSet();
         final targetSet = targetChecksums.toSet();
         if (storedSet.length == targetSet.length &&
@@ -379,7 +379,7 @@ class FetchDefiApiStep extends BuildStep {
     }
   }
 
-  void _setExecutablePermissions(String destinationFolder) {
+  Future<void> _setExecutablePermissions(String destinationFolder) async {
     _log.info('Setting executable permissions for $destinationFolder...');
     // Update the file permissions to make it executable. As part of the
     // transition from mm2 naming to kdf, update whichever file is present.
@@ -390,7 +390,13 @@ class FetchDefiApiStep extends BuildStep {
 
     if (!Platform.isWindows) {
       for (final filePath in binaryNames) {
-        Process.run('chmod', ['+x', filePath.path]);
+        final result = await Process.run('chmod', ['+x', filePath.path]);
+        if (result.exitCode != 0) {
+          throw FileSystemException(
+            'Could not make KDF executable: ${result.stderr}',
+            filePath.path,
+          );
+        }
       }
     }
   }
@@ -406,23 +412,28 @@ class FetchDefiApiStep extends BuildStep {
   // TODO: Dynamically determine if the platform is using an executable file
   // or static/dynamic library.
   bool _isBinaryExecutable(String platform) {
-    return platform == 'linux' || platform == 'macos' || platform == 'windows';
+    return platform == 'linux' ||
+        platform == 'linux-arm64' ||
+        platform == 'macos' ||
+        platform == 'windows';
   }
 
-  Future<void> _postUpdateActions(String platform, String destinationFolder) {
+  Future<void> _postUpdateActions(
+    String platform,
+    String destinationFolder,
+  ) async {
     if (platform == 'web') {
-      return _updateWebPackages();
+      await _updateWebPackages();
+      return;
       // TODO: Consider adding npm if it makes a significant difference to
       // file build size or if it is required for cache-busting.
     }
     if (_isBinaryExecutable(platform)) {
       _tryRenameExecutable(platform, destinationFolder);
-      _setExecutablePermissions(destinationFolder);
+      await _setExecutablePermissions(destinationFolder);
     } else {
       _tryRenameLibrary(platform, destinationFolder);
     }
-
-    return Future.value();
   }
 
   /// if executable is named "mm2" or "mm2.exe", then rename to "kdf"
