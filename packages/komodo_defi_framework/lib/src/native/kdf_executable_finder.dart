@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as p;
@@ -73,8 +74,9 @@ class KdfExecutableFinder {
       }
     }
 
+    final searchedPaths = files.map((file) => file.absolute.path).join('\n');
     logCallback(
-      'Executable not found in paths: ${files.map((e) => e.absolute.path).join('\n')}. '
+      'Executable not found in paths: $searchedPaths. '
       'If you are using the KDF Flutter SDK, open an issue on GitHub.',
     );
 
@@ -86,14 +88,18 @@ class KdfExecutableFinder {
     BuildMode mode = BuildMode.release,
     bool isLib = false,
     String executableName = 'kdf',
+    Abi? abi,
   }) {
     // Linux uses lowercase folder names
     final modeName = mode.name.toLowerCase();
+    final architecture = (abi ?? Abi.current()) == Abi.linuxArm64
+        ? 'arm64'
+        : 'x64';
     return p.join(
       Directory.current.path,
       'build',
       'linux',
-      'x64',
+      architecture,
       modeName,
       'bundle',
       'lib',
