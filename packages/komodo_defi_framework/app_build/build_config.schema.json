@@ -27,7 +27,7 @@
                         "web": {
                             "type": "object",
                             "properties": {
-                                "matching_keyword": {
+                                "matching_pattern": {
                                     "type": "string"
                                 },
                                 "valid_zip_sha256_checksums": {
@@ -42,7 +42,7 @@
                                 }
                             },
                             "required": [
-                                "matching_keyword",
+                                "matching_pattern",
                                 "valid_zip_sha256_checksums",
                                 "path"
                             ]
@@ -50,7 +50,7 @@
                         "ios": {
                             "type": "object",
                             "properties": {
-                                "matching_keyword": {
+                                "matching_pattern": {
                                     "type": "string"
                                 },
                                 "valid_zip_sha256_checksums": {
@@ -65,7 +65,7 @@
                                 }
                             },
                             "required": [
-                                "matching_keyword",
+                                "matching_pattern",
                                 "valid_zip_sha256_checksums",
                                 "path"
                             ]
@@ -73,7 +73,7 @@
                         "macos": {
                             "type": "object",
                             "properties": {
-                                "matching_keyword": {
+                                "matching_pattern": {
                                     "type": "string"
                                 },
                                 "valid_zip_sha256_checksums": {
@@ -88,7 +88,7 @@
                                 }
                             },
                             "required": [
-                                "matching_keyword",
+                                "matching_pattern",
                                 "valid_zip_sha256_checksums",
                                 "path"
                             ]
@@ -96,7 +96,7 @@
                         "windows": {
                             "type": "object",
                             "properties": {
-                                "matching_keyword": {
+                                "matching_pattern": {
                                     "type": "string"
                                 },
                                 "valid_zip_sha256_checksums": {
@@ -111,7 +111,7 @@
                                 }
                             },
                             "required": [
-                                "matching_keyword",
+                                "matching_pattern",
                                 "valid_zip_sha256_checksums",
                                 "path"
                             ]
@@ -119,7 +119,7 @@
                         "android-armv7": {
                             "type": "object",
                             "properties": {
-                                "matching_keyword": {
+                                "matching_pattern": {
                                     "type": "string"
                                 },
                                 "valid_zip_sha256_checksums": {
@@ -134,7 +134,7 @@
                                 }
                             },
                             "required": [
-                                "matching_keyword",
+                                "matching_pattern",
                                 "valid_zip_sha256_checksums",
                                 "path"
                             ]
@@ -142,7 +142,7 @@
                         "android-aarch64": {
                             "type": "object",
                             "properties": {
-                                "matching_keyword": {
+                                "matching_pattern": {
                                     "type": "string"
                                 },
                                 "valid_zip_sha256_checksums": {
@@ -157,7 +157,7 @@
                                 }
                             },
                             "required": [
-                                "matching_keyword",
+                                "matching_pattern",
                                 "valid_zip_sha256_checksums",
                                 "path"
                             ]
@@ -165,7 +165,7 @@
                         "linux": {
                             "type": "object",
                             "properties": {
-                                "matching_keyword": {
+                                "matching_pattern": {
                                     "type": "string"
                                 },
                                 "valid_zip_sha256_checksums": {
@@ -180,7 +180,30 @@
                                 }
                             },
                             "required": [
-                                "matching_keyword",
+                                "matching_pattern",
+                                "valid_zip_sha256_checksums",
+                                "path"
+                            ]
+                        },
+                        "linux-arm64": {
+                            "type": "object",
+                            "properties": {
+                                "matching_pattern": {
+                                    "type": "string"
+                                },
+                                "valid_zip_sha256_checksums": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string",
+                                        "pattern": "^[a-f0-9]{64}$"
+                                    }
+                                },
+                                "path": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "matching_pattern",
                                 "valid_zip_sha256_checksums",
                                 "path"
                             ]
